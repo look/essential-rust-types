@@ -1,0 +1,75 @@
+#+TITLE: Essential Rust Types
+#+STARTUP: showeverything
+#+STARTUP: indent
+#+OPTIONS: toc:nil
+#+OPTIONS: num:nil
+
+* Introduction
+Rust is a language of types. When you are learning Rust and reading unfamilar Rust code, you see a lot of type.  _Essential Rust Types_ is an attempt to provide a quick reference to the most commonly used types. It is not comprensive ([[https://doc.rust-lang.org/std/][read the docs]] for that), but rather a learning tool.
+
+The Rust types documented here come in three flavors: Traits, Structs, and Enums. Traits are Rust's version of interfaces and because they are used to define behavior for types (including custom user types) they are the most commonly documented here. Types are given fully qualified, unless they are part of the [[https://doc.rust-lang.org/std/prelude/index.html][standard prelude]].
+* Rust types
+** [[https://doc.rust-lang.org/std/clone/trait.Clone.html][~Clone~]]                                                           :trait:
+~Clone~ copies an object by running user-defined code, which may or may not be expensive.
+** [[https://doc.rust-lang.org/std/marker/trait.Copy.html][~Copy~]]                                                            :trait:
+~Copy~ is a [[https://doc.rust-lang.org/std/marker/index.html][marker trait]]. When a type implements ~Copy~, assignment does a bit-for-bit copy of values, rather than moving it. For example ~usize~ is ~Copy~ but ~Vec<usize>~ is not ~Copy~. 
+
+You can implement ~Copy~ for your own types as long as all members are also ~Copy~. ~Clone~ is a supertrait of ~Copy~, so everything implementing ~Copy~ must also implement ~Clone~.
+** FromIter
+#+BEGIN_QUOTE
+Result implements FromIter so that a vector of results (Vec<Result<T, E>>) can
+be turned into a result with a vector (Result<Vec<T>, E>). Once an Result::Err
+is found, the iteration will terminate.
+#+END_QUOTE
+https://doc.rust-lang.org/rust-by-example/error/iter_result.html
+** [[https://doc.rust-lang.org/std/option/enum.Option.html][~Option~]]                                                           :enum:
+~Option~ is an enum with two values, ~None~ and ~Some(T)~. Rust does not have ~null~ so ~None~ is used to indicate a missing value.
+
+Option can be pattern-matched:
+
+#+BEGIN_SRC
+x match {
+  Some(x) => println!("Got {}", x),
+  None => println!("Not found!"),
+};
+#+END_SRC
+
+Used in [[https://doc.rust-lang.org/rust-by-example/flow_control/if_let.html][~if let~]] statements:
+
+#+BEGIN_SRC
+if let Some(x) = y {
+  println!("Do something with x");
+}
+#+END_SRC
+
+And ~Option~ has several useful methods for working with values, including ~map~, ~map_or~, ~and_then~, and ~filter~. ~ok_or~ and ~ok_or_else~ allow converting an ~Option~ into a ~Result~.
+
+Option can also be unwrapped using ~unwrap~ and ~expect~. When called on a ~None~ value, this will cause a panic.
+** Sized
+** [[https://doc.rust-lang.org/std/default/trait.Default.html][~Default~]]                                           :trait:
+The ~Default~ trait provides a default value for a type, similar to Go's zero value, using ~TypeName::default()~. Rust provides default value implementations for most primitive types (for example, [[https://doc.rust-lang.org/std/primitive.u16.html#impl-Default][here is the one for ~u16~ ]]). If all the types of a struct implement ~Default~, it can be derived with ~#[derive(Default)]~.
+
+** ~Box~
+~Box<T>~ is a heap-allocated pointer for ~T~. Box allows you to move a value from the stack to the heap. This is necessary for self-referential data types.
+** Error
+Trait for Error types, often returned in Result<T, E>
+** [[https://doc.rust-lang.org/std/fmt/trait.Debug.html][std::fmt::Debug]] :trait:
+For use in string formatting with ~{:?}~ and ~{#?}~ (for pretty printing). ~Debug~ can automatically be derived as long as all the fields of a struct or enum are also ~Debug~:
+
+#+BEGIN_SRC
+#[derive(Debug)]
+struct Person {
+  name: String,
+}
+#+END_SRC
+
+To implement ~Debug~ yourself, you must provide a ~fmt~ method.
+
+In general, you should define ~Debug~ for your types.
+** [[https://doc.rust-lang.org/std/fmt/trait.Display.html][~std::fmt::Display~]]                                               :trait:
+Implement ~Display~ for your types to use string formatting with ~{}~. It provides the ~to_string()~ method because implementing ~Display~ automatically implements [[https://doc.rust-lang.org/std/string/trait.ToString.html][~ToString~]].
+
+~Display~ is similar to ~Debug~ but it cannot be derived automatically because it is intended for user-facing display.
+** String :struct:
+
+
