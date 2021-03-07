@@ -5,7 +5,7 @@
 #+OPTIONS: num:nil
 
 * Introduction
-Rust is a language of types. When you are learning Rust and reading unfamilar Rust code, you see a lot of type.  _Essential Rust Types_ is an attempt to provide a quick reference to the most commonly used types. It is not comprensive ([[https://doc.rust-lang.org/std/][read the docs]] for that), but rather a learning tool.
+Rust is a language of types. When you are learning Rust and reading unfamiliar Rust code, you see a lot of type.  _Essential Rust Types_ is an attempt to provide a quick reference to the most commonly used types. It is not comprehensive ([[https://doc.rust-lang.org/std/][read the docs]] for that), but rather a learning tool.
 
 The Rust types documented here come in three flavors: Traits, Structs, and Enums. Traits are Rust's version of interfaces and because they are used to define behavior for types (including custom user types) they are the most commonly documented here. Types are given fully qualified, unless they are part of the [[https://doc.rust-lang.org/std/prelude/index.html][standard prelude]].
 * Rust types
